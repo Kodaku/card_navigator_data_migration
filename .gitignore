@@ -160,4 +160,4 @@ cython_debug/
 .idea/
 /sso_migration_to_elasticsearch
 
-./card_navigator_data_migration
+card_navigator_data_migration/
