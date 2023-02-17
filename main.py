@@ -20,7 +20,7 @@ def es_create_index_if_not_exists(es, index):
 
 es = Elasticsearch(
     hosts=['http://localhost:9200'],
-    basic_auth=('elastic', 'e0_kX+xT1Oh_v+8pLot3')
+    basic_auth=('elastic', 'Cj-ChuXcllkRQF8t8VFa')
 )
 
 index_name = "expansions"
