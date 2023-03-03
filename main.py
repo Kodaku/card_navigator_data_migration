@@ -20,7 +20,7 @@ def es_create_index_if_not_exists(es, index):
 
 es = Elasticsearch(
     hosts=['http://localhost:9200'],
-    basic_auth=('elastic', 'e0_kX+xT1Oh_v+8pLot3')
+    basic_auth=('elastic', 'Cj-ChuXcllkRQF8t8VFa')
 )
 
 index_name = "expansions"
@@ -29,17 +29,20 @@ if not es.indices.exists(index=index_name):
     print(f"Index {index_name} created")
     es_create_index_if_not_exists(es, index_name)
 
-expansions_names = os.listdir("./data")
+expansion_years = os.listdir("./data")
 actions = []
-for expansion_name in expansions_names:
-    if expansion_name == "all_expansions.json":
+for expansion_year in expansion_years:
+    if expansion_year == "all_expansions.json":
         continue
-    with open(f"./data/{expansion_name}") as json_file:
-        expansion = json.load(json_file)
-        action = {"index": {"_index": index_name, "_id": expansion_name}, "_op_type": "upsert"}
-        doc = expansion
-        actions.append(action)
-        actions.append(json.dumps(doc, cls=PdEncoder))
-
+    expansions_names = os.listdir("./data/" + expansion_year)
+    for expansion_name in expansions_names:
+        print(f"{expansion_name} {expansion_year}")
+        with open(f"./data/{expansion_year}/{expansion_name}") as json_file:
+            expansion = json.load(json_file)
+            action = {"index": {"_index": index_name, "_id": expansion_name}, "_op_type": "upsert"}
+            doc = expansion
+            doc["year"] = expansion_year
+            actions.append(action)
+            actions.append(json.dumps(doc, cls=PdEncoder))
 res = es.bulk(index=index_name, operations=actions)
 print(res)
